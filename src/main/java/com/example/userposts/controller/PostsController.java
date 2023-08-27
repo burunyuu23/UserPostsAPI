@@ -1,7 +1,7 @@
 package com.example.userposts.controller;
 
-import com.example.userposts.dto.response.PostDTO;
-import com.example.userposts.dto.response.PostsListDTO;
+import com.example.userposts.dto.PostDTO;
+import com.example.userposts.dto.PostsListDTO;
 import com.example.userposts.model.Post;
 import com.example.userposts.service.PostsService;
 import org.modelmapper.ModelMapper;

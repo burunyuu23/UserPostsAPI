@@ -1,6 +1,6 @@
-package com.example.userposts.controller;
+package com.example.userposts.exception;
 
-import com.example.userposts.dto.response.ErrorDTO;
+import com.example.userposts.dto.ErrorDTO;
 import com.example.userposts.exception.AppException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

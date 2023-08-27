@@ -1,8 +1,7 @@
-package com.example.userposts.dto.response;
+package com.example.userposts.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
