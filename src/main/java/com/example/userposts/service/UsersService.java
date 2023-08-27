@@ -1,5 +1,6 @@
 package com.example.userposts.service;
 
+import com.example.userposts.dto.UserDTO;
 import com.example.userposts.model.User;
 import com.example.userposts.repository.UsersRepository;
 import com.example.userposts.exception.UserNotFoundException;
@@ -19,6 +20,14 @@ public class UsersService {
 
     public List<User> getAll() {
         return usersRepository.findAll();
+    }
+
+    public void addUser(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setBirthdate(userDTO.getBirthdate());
+
+        usersRepository.save(user);
     }
 
     public Optional<User> getUserById(String id) {
