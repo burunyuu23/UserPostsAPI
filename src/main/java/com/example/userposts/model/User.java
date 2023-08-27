@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.UUID;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -21,6 +22,9 @@ public class User implements Serializable {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "birthdate")
+    private LocalDate birthdate;
 
     @OneToMany(mappedBy = "whoShouldAccept")
     @EqualsAndHashCode.Exclude
@@ -53,5 +57,12 @@ public class User implements Serializable {
                 .filter(Friends::isAccepted)
                 .map(Friends::getWhoShouldAccept);
         return Stream.concat(incomingFriendsStream, outgoingFriendsStream).toList();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (imageUrl == null) {
+            imageUrl = "https://i.ibb.co/w04Prt6/c1f64245afb2.gif";
+        }
     }
 }
