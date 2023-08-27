@@ -1,13 +1,15 @@
 server:
+  url: "http://localhost"
+  port: 5002
   servlet:
-    context-path: /api
+    context-path: /api/users_posts
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/user_posts
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5437/users_posts_db
+    username: dnlkk
+    password: dnlkkpass
 
   jpa:
     properties:
