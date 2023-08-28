@@ -10,9 +10,28 @@ spring:
     url: jdbc:postgresql://localhost:5437/users_posts_db
     username: dnlkk
     password: dnlkkpass
+    jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          show_sql: true
 
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.url}/realms/${keycloak.realm}
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+frontend:
+  url: "http://localhost:3000"
+
+keycloak:
+  port : 8282
+  url: "${server.url}:${keycloak.port}"
+  realm: "repaintinggame"
+  jwt:
+    auth:
+      converter:
+        principle-attribute: preferred_username
+        resource-id: repaint-game
