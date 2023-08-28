@@ -1,5 +1,6 @@
 package com.example.userposts.controller;
 
+import com.example.userposts.dto.FullUserDTO;
 import com.example.userposts.dto.IncomingFriendsDTO;
 import com.example.userposts.dto.OutgoingFriendsDTO;
 import com.example.userposts.dto.UserDTO;
@@ -10,8 +11,13 @@ import com.example.userposts.model.Friends;
 import com.example.userposts.model.User;
 import com.example.userposts.service.UsersService;
 import com.example.userposts.exception.UserNotFoundException;
+import com.example.userposts.util.KeycloakProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin
 public class UsersController {
     private final UsersService usersService;
     private final ModelMapper modelMapper;
@@ -33,13 +40,36 @@ public class UsersController {
         return ResponseEntity.ok(usersService.getAll().stream().map(this::convertToUserDTO).toList());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable("id") String id) {
-        Optional<User> optUser = usersService.getUserById(id);
-        return ResponseEntity.ok(convertToUserDTO(optUser.orElseThrow(() -> new UserNotFoundException(id))));
-    }
+    @GetMapping("/{username}")
+    public ResponseEntity<FullUserDTO> getByUsername(@PathVariable("username") String username) {
+        FullUserDTO fullUserDTO = KeycloakProvider.getUser(username);
 
+        Optional<User> optUser = usersService.getUserById(fullUserDTO.getId());
+        UserDTO userDTO = convertToUserDTO(optUser.orElseThrow(() -> new UserNotFoundException(fullUserDTO.getId())));
+
+        fullUserDTO.setBirthdate(userDTO.getBirthdate());
+        fullUserDTO.setImageUrl(userDTO.getImageUrl());
+        return ResponseEntity.ok(fullUserDTO);
+    }
+    @GetMapping("/profile")
+    @PreAuthorize("hasRole('user')")
+    public ResponseEntity<FullUserDTO> getProfile() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Jwt jwt = (Jwt) context.getAuthentication().getPrincipal();
+
+        String userId = jwt.getClaims().get("sub").toString();
+        String username = jwt.getClaims().get("preferred_username").toString();
+
+        Optional<User> optUser = usersService.getUserById(userId);
+        UserDTO userDTO = convertToUserDTO(optUser.orElseThrow(() -> new UserNotFoundException(userId)));
+
+        FullUserDTO fullUserDTO = KeycloakProvider.getUser(username);
+        fullUserDTO.setBirthdate(userDTO.getBirthdate());
+        fullUserDTO.setImageUrl(userDTO.getImageUrl());
+        return ResponseEntity.ok(fullUserDTO);
+    }
     @PostMapping("/add")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<String> add(@RequestBody UserDTO user) {
         usersService.addUser(user);
         return ResponseEntity.ok("User added!");

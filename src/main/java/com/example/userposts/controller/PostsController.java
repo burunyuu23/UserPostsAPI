@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/posts")
+@CrossOrigin
 public class PostsController {
     private final PostsService postsService;
     private final ModelMapper modelMapper;
