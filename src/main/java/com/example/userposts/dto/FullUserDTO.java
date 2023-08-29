@@ -15,6 +15,8 @@ public class FullUserDTO {
     private String lastName;
     private Long createdTimestamp;
     private LocalDate birthdate;
-    @JsonProperty("image_url")
-    private String imageUrl;
+    @JsonProperty("profile_image_url")
+    private String profileImageUrl;
+    @JsonProperty("banner_image_url")
+    private String bannerImageUrl;
 }

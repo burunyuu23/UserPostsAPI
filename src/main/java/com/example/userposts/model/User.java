@@ -20,8 +20,10 @@ public class User implements Serializable {
     @UUID(message = "User id should be in UUID format.")
     private String id;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+    @Column(name = "banner_image_url")
+    private String bannerImageUrl;
 
     @Column(name = "birthdate")
     private LocalDate birthdate;
@@ -61,8 +63,11 @@ public class User implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        if (imageUrl == null) {
-            imageUrl = "https://i.ibb.co/w04Prt6/c1f64245afb2.gif";
+        if (profileImageUrl == null) {
+            profileImageUrl = "https://i.ibb.co/LNdXxj0/default-profile.png";
+        }
+        if (bannerImageUrl == null) {
+            bannerImageUrl = "https://i.ibb.co/svp1sZh/defalut-banner.png";
         }
     }
 }

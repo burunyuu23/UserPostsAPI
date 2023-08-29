@@ -48,7 +48,8 @@ public class UsersController {
         UserDTO userDTO = convertToUserDTO(optUser.orElseThrow(() -> new UserNotFoundException(fullUserDTO.getId())));
 
         fullUserDTO.setBirthdate(userDTO.getBirthdate());
-        fullUserDTO.setImageUrl(userDTO.getImageUrl());
+        fullUserDTO.setBannerImageUrl(userDTO.getBannerImageUrl());
+        fullUserDTO.setProfileImageUrl(userDTO.getProfileImageUrl());
         return ResponseEntity.ok(fullUserDTO);
     }
     @GetMapping("/profile")
@@ -65,7 +66,7 @@ public class UsersController {
 
         FullUserDTO fullUserDTO = KeycloakProvider.getUser(username);
         fullUserDTO.setBirthdate(userDTO.getBirthdate());
-        fullUserDTO.setImageUrl(userDTO.getImageUrl());
+        fullUserDTO.setProfileImageUrl(userDTO.getProfileImageUrl());
         return ResponseEntity.ok(fullUserDTO);
     }
     @PostMapping("/add")
